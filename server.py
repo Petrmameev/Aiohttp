@@ -91,9 +91,6 @@ class UserView(web.View):
         await self.session.commit()
         return web.json_response({"status": "deleted"})
 
-
-app.add_routes([app.get()])
-
 app.add_routes(
     [
         web.get("/user/{user_id:\d+}/", UserView),
