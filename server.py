@@ -52,7 +52,7 @@ class UserView(web.View):
         return int(self.request.match_info["user_id"])
 
     async def get(self):
-        user = await get_user(int(self.request.match_info["user_id"]), self.session)
+        user = await get_user(self.user_id, self.session)
         return web.json_response(
             {
                 "id": user.id,
@@ -71,6 +71,7 @@ class UserView(web.View):
             await self.session.commit()
         except IntegrityError as err:
             raise get_http_error(web.HTTPConflict, "user already exists")
+        user = await get_user(user.id, self.session)
         return web.json_response({"id": user.id})
 
     async def patch(self):

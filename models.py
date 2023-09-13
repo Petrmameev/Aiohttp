@@ -14,9 +14,9 @@ PG_DB = os.getenv("PG_DB", "app_db")
 PG_HOST = os.getenv("PG_HOST", "127.0.0.1")
 PG_PORT = os.getenv("PG_PORT", "5432")
 
-# PG_DSN = f"postgresql://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}"
-# PG_DSN = f'postgresql+asyncpg://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}'
-PG_DSN = 'postgresql+asyncpg://user:password@127.0.0.1:5432'
+PG_DSN = f"postgresql+asyncpg://{PG_USER}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DB}"
+# PG_DSN = 'postgresql+asyncpg://user:password@127.0.0.1:5432/app_db'
+# PG_DSN = 'postgresql+asyncpg://user:password@127.0.0.1:5432'
 
 engine = create_async_engine(PG_DSN)
 Session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
@@ -29,4 +29,4 @@ class User(Base):
     name = Column(String, nullable=False, unique=True, index=True)
     description = Column(String, nullable=False)
     creation_time = Column(DateTime, server_default=func.now())
-    owner = Column(String, nullable=False)
+    owner = Column(String)
