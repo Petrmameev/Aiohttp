@@ -1,16 +1,17 @@
 import json
 
-from models import Base, Session, User, engine
+from aiohttp import web
 from sqlalchemy.exc import IntegrityError
 
-from aiohttp import web
+from models import Base, Session, User, engine
 
 app = web.Application()
 
 
 def get_http_error(http_error_class, message):
     return http_error_class(
-        text=json.dumps({"error": message}), content_type="application/json")
+        text=json.dumps({"error": message}), content_type="application/json"
+    )
 
 
 async def orm_cntx(app: web.Application):
@@ -24,7 +25,7 @@ async def orm_cntx(app: web.Application):
 
 @web.middleware
 async def session_middleware(request: web.Request, handler):
-    async with Session as session:
+    async with Session() as session:
         request["session"] = session
         response = await handler(request)
         return response
@@ -90,6 +91,7 @@ class UserView(web.View):
         await self.session.delete(user)
         await self.session.commit()
         return web.json_response({"status": "deleted"})
+
 
 app.add_routes(
     [
