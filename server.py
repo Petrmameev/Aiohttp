@@ -10,8 +10,7 @@ app = web.Application()
 
 def get_http_error(http_error_class, message):
     return http_error_class(
-        text=json.dumps({"error": message}), content_type="application/json"
-    )
+        text=json.dumps({"error": message}), content_type="application/json")
 
 
 async def orm_cntx(app: web.Application):
